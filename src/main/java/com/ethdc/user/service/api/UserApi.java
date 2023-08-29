@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -50,9 +51,9 @@ public class UserApi {
      * @return the users
      */
     @GetMapping(value = "")
-    public List<User> getUsers() {
+    public Flux<User> getUsers() {
         log.info("{}::{}","UserApi","getUsers()");
-        return USER_MAP.values().stream().toList();
+        return Flux.fromIterable(USER_MAP.values());
     }
     @GetMapping(value = "/{id}")
     public Mono<User> getUsers(@PathVariable int id) {
@@ -60,8 +61,8 @@ public class UserApi {
     }
 
     @GetMapping(value = "/list-fallback")
-    public List<User> getUsersFallback() {
-        return List.of();
+    public Flux<User> getUsersFallback() {
+        return Flux.empty();
     }
 
 }
